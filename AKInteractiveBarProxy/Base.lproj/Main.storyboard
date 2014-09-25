@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Nry-zE-r3B">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES" address="YES" calendarEvent="YES"/>
+                            </webView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ooI-Io-1a6">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="64"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n1R-bb-1dP">
+                                        <rect key="frame" x="284" y="22" width="33" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="64" id="08a-jX-ECr"/>
+                                    <constraint firstAttribute="centerY" secondItem="n1R-bb-1dP" secondAttribute="centerY" id="7R2-pD-PVa"/>
+                                    <constraint firstAttribute="centerX" secondItem="n1R-bb-1dP" secondAttribute="centerX" id="pgD-bF-as5"/>
+                                </constraints>
+                            </view>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qli-GZ-ORS">
+                                <rect key="frame" x="0.0" y="556" width="600" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="PMM-ch-gJV"/>
+                                </constraints>
+                                <items>
+                                    <barButtonItem systemItem="refresh" id="FbO-3f-9bR">
+                                        <connections>
+                                            <action selector="onRefreshButton:" destination="BYZ-38-t0r" id="Oly-7s-ike"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </items>
+                            </toolbar>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="ooI-Io-1a6" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="ATR-I8-nt6"/>
+                            <constraint firstItem="ooI-Io-1a6" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="Fpt-Z0-P58"/>
+                            <constraint firstAttribute="trailing" secondItem="ooI-Io-1a6" secondAttribute="trailing" id="LoY-2z-BU4"/>
+                            <constraint firstItem="Nry-zE-r3B" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="QYI-WY-dBV"/>
+                            <constraint firstItem="Nry-zE-r3B" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="TTp-XH-ijf"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="Nry-zE-r3B" secondAttribute="bottom" id="Yi2-9x-8nh"/>
+                            <constraint firstItem="Qli-GZ-ORS" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="cts-RG-nju"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="Qli-GZ-ORS" secondAttribute="bottom" id="egn-fk-4Zh"/>
+                            <constraint firstAttribute="trailing" secondItem="Nry-zE-r3B" secondAttribute="trailing" id="elT-ZS-aSx"/>
+                            <constraint firstAttribute="trailing" secondItem="Qli-GZ-ORS" secondAttribute="trailing" id="mTu-yH-cxI"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="headerTitleLabel" destination="n1R-bb-1dP" id="1Zb-l1-aGY"/>
+                        <outlet property="headerView" destination="ooI-Io-1a6" id="WVi-tR-heU"/>
+                        <outlet property="headerViewHeight" destination="08a-jX-ECr" id="I4B-ml-nkP"/>
+                        <outlet property="refreshButton" destination="FbO-3f-9bR" id="qMy-RI-7hZ"/>
+                        <outlet property="toolbar" destination="Qli-GZ-ORS" id="mmQ-pd-rCM"/>
+                        <outlet property="toolbarHeight" destination="PMM-ch-gJV" id="Oz9-wI-QjD"/>
+                        <outlet property="webView" destination="Nry-zE-r3B" id="zlz-nj-ibf"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="353" y="404"/>
+        </scene>
+    </scenes>
+</document>
