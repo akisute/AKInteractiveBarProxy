@@ -8,6 +8,8 @@ CocoaPods
 
 ## Usage
 
+Instanticate AKInteractiveBarProxy with your scroll view.
+
 ```objc
 // Instaciate the target scroll view (or subclasses of scroll view, like table view).
 self.scrollView = [[UIScrollView alloc] initWithFrame:self.contentView.bounds];
@@ -15,16 +17,20 @@ self.scrollView = [[UIScrollView alloc] initWithFrame:self.contentView.bounds];
 
 // Provide a proxy
 // interactionTranslation defines how far users have to pan before interaction is complete.
-self.interactiveBarProxy = [[AKInteractiveBarProxy alloc] initWithScrollView:self.scrollView delegate:self];
+self.interactiveBarProxy = [[AKInteractiveBarProxy alloc] initWithScrollView:self.scrollView
+                                                                    delegate:self];
 self.interactiveBarProxy.interactionTranslation = 64.0;
 ```
+
+Once setup is done, implement delegate methods for the proxy. You can also implement UIScrollViewDelegate as well since AKInteractiveBarProxyDelegate confirms UIScrollViewDelegate.
 
 ```objc
 // Implement delegate methods
 - (void)proxy:(AKInteractiveBarProxy *)proxy receivedInteractiveGestureWithProgress:(CGFloat)progress
 {
     // This delegate is called when the proxy detects interactive gestures.
-    // Implement your interactive animation here. Note this method is gets called until user stops interactions.
+    // Implement your interactive animation here.
+    // Note this method is gets called until user stops interactions.
     // progress 0.0 = Your bar should be completely hidden
     // progress 1.0 = Your bar should be completely visible
     self.bar.alpha = progress;
@@ -37,10 +43,9 @@ self.interactiveBarProxy.interactionTranslation = 64.0;
     [self.bar setHidden:hidden animated:YES];
 }
 
-// You can implement UIScrollViewDelegate as well (since AKInteractiveBarProxyDelegate confirms UIScrollViewDelegate)
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    // Do anything you want...
+    // This will also gets called. Do anything you want!
 }
 ```
 
