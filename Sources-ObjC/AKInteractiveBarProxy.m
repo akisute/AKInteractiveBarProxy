@@ -41,9 +41,9 @@ typedef NS_ENUM(NSInteger, InteractiveBarState) {
         CGFloat initialContentOffsetY = self.contentOffsetAtBeginning.y;
         
         if (dy > 0) {
-            // 上にスクロール（コンテンツを下に引っ張っている、progressの値は増加する）
-            // - コンテンツの上端から更に上にスクロールしている場合はinteractiveにヘッダバーを表示する
-            // - そうでない場合は、何もしない
+            // User scrolling up = dragging down = progress increases
+            // - Interactively show when we're at the top of content (CURRENTLY A BIT BROKEN)
+            // - Otherwise do nothing
             if (initialContentOffsetY < 0) {
                 CGFloat progress = ABS(dy/self.proxy.interactionTranslation);
                 if (self.interactiveBarStateAtBeginning == InteractiveBarStateVisible) {
@@ -55,9 +55,9 @@ typedef NS_ENUM(NSInteger, InteractiveBarState) {
                 }
             }
         } else if (dy < 0) {
-            // 下にスクロール（コンテンツを上に引っ張っている、progressの値は減少する）
-            // - コンテンツの末端から更に下にスクロールを開始した場合は、non-interactiveにヘッダバーを表示する
-            // - そうでない場合は、interactiveにヘッダバーを隠す
+            // User scrolling down = dragging up = progress decreases
+            // - Non-interactively show when we begin drags at the end of content
+            // - Otherwise interactively hide
             if (initialContentOffsetY >= (scrollView.contentSize.height - scrollView.bounds.size.height - 1.0)) {
                 [self delegateNonInteractiveActionWithBarHidden:NO];
             } else {
@@ -92,13 +92,12 @@ typedef NS_ENUM(NSInteger, InteractiveBarState) {
 {
     if (decelerate) {
         if ([scrollView.panGestureRecognizer translationInView:scrollView].y > 0) {
-            // 下にフリック（コンテンツを下に弾く）
-            // non-interactiveにヘッダバーを表示する
+            // Flick down
+            // Non-interactively show
             [self delegateNonInteractiveActionWithBarHidden:NO];
         } else if ([scrollView.panGestureRecognizer translationInView:scrollView].y < 0) {
-            // 上にフリック（コンテンツを上に弾く）
-            // - non-interactiveにヘッダバーを隠す
-            // - ただしコンテンツの下端より下に弾いている場合には何もしない
+            // Flick up
+            // - Non-interactively hide unless we're at the bottom of content
             if (scrollView.contentOffset.y >= (scrollView.contentSize.height - scrollView.bounds.size.height - 1.0)) {
                 // do nothing
             } else {
@@ -107,8 +106,8 @@ typedef NS_ENUM(NSInteger, InteractiveBarState) {
         }
     } else {
         if ([scrollView.panGestureRecognizer translationInView:scrollView].y > 0) {
-            // 下にドラッグして停止
-            // interactiveなアニメーション中であればその方向に応じてヘッダバーを出したり消したりする
+            // Drag down and hold, then stop
+            // Kill interactive animation with non-interactive one, depending on its current direction
             if (self.interactiveBarState == InteractiveBarStateInteracting) {
                 if (self.interactiveBarStateAtBeginning == InteractiveBarStateVisible) {
                     [self delegateNonInteractiveActionWithBarHidden:YES];
@@ -117,9 +116,8 @@ typedef NS_ENUM(NSInteger, InteractiveBarState) {
                 }
             }
         } else {
-            // 上またはその場ににドラッグして停止
-            // non-interactiveにヘッダバーを隠す
-            // - ただしコンテンツの下端より下に弾いている場合には何もしない
+            // Drag up and hold (or just hold), then stop
+            // - Non-interactively hide unless we're at the bottom of content
             if (scrollView.contentOffset.y >= (scrollView.contentSize.height - scrollView.bounds.size.height - 0.5)) {
                 // do nothing
             } else {
