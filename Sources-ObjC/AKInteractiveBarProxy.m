@@ -39,25 +39,24 @@ typedef NS_ENUM(NSInteger, InteractiveBarState) {
     if (scrollView.panGestureRecognizer.state == UIGestureRecognizerStateChanged) {
         CGFloat dy = [scrollView.panGestureRecognizer translationInView:scrollView].y;
         CGFloat initialContentOffsetY = self.contentOffsetAtBeginning.y;
+        //CGRect visibleRect = UIEdgeInsetsInsetRect(scrollView.bounds, scrollView.contentInset);
         
         if (dy > 0) {
             // User scrolling up = dragging down = progress increases
-            // - Interactively show when we're at the top of content (CURRENTLY A BIT BROKEN)
+            // - Interactively show when we're at the top of content
             // - Otherwise do nothing
-            if (initialContentOffsetY < 0) {
-                CGFloat progress = ABS(dy/self.proxy.interactionTranslation);
-                if (self.interactiveBarStateAtBeginning == InteractiveBarStateVisible) {
-                    progress = 1.0;
-                    [self delegateInteractiveActionWithProgress:progress];
-                } else if (self.interactiveBarStateAtBeginning == InteractiveBarStateHidden) {
-                    progress = MAX(0.0, MIN(progress, 1.0));
-                    [self delegateInteractiveActionWithProgress:progress];
-                }
+            CGFloat y = MAX(0.0, (scrollView.contentOffset.y + scrollView.contentInset.top));
+            if (y <= self.proxy.interactionTranslation) {
+                CGFloat progress = ABS(y/self.proxy.interactionTranslation);
+                progress = 1.0 - MAX(0.0, MIN(progress, 1.0));
+                [self delegateInteractiveActionWithProgress:progress];
             }
         } else if (dy < 0) {
             // User scrolling down = dragging up = progress decreases
             // - Non-interactively show when we begin drags at the end of content
             // - Otherwise interactively hide
+            
+            //if (initialContentOffsetY >= (scrollView.contentSize.height - (visibleRect.size.height + visibleRect.origin.y) - 1.0)) {
             if (initialContentOffsetY >= (scrollView.contentSize.height - scrollView.bounds.size.height - 1.0)) {
                 [self delegateNonInteractiveActionWithBarHidden:NO];
             } else {
@@ -118,7 +117,7 @@ typedef NS_ENUM(NSInteger, InteractiveBarState) {
         } else {
             // Drag up and hold (or just hold), then stop
             // - Non-interactively hide unless we're at the bottom of content
-            if (scrollView.contentOffset.y >= (scrollView.contentSize.height - scrollView.bounds.size.height - 0.5)) {
+            if (scrollView.contentOffset.y >= (scrollView.contentSize.height - scrollView.bounds.size.height - 1.0)) {
                 // do nothing
             } else {
                 [self delegateNonInteractiveActionWithBarHidden:YES];
