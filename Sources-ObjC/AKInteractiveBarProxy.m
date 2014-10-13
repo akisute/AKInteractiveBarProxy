@@ -29,6 +29,7 @@ typedef NS_ENUM(NSInteger, InteractiveBarState) {
 @property (nonatomic) CGFloat interactionTranslation;
 @property (nonatomic) InteractiveBarState interactiveBarState;
 @property (nonatomic) InteractiveBarState interactiveBarStateAtBeginning;
+@property (nonatomic) CGFloat lastInteractingProgress;
 @property (nonatomic) CGPoint contentOffsetAtBeginning;
 @end
 
@@ -40,34 +41,37 @@ typedef NS_ENUM(NSInteger, InteractiveBarState) {
 {
     if (scrollView.panGestureRecognizer.state == UIGestureRecognizerStateChanged) {
         CGFloat dy = [scrollView.panGestureRecognizer translationInView:scrollView].y;
-        CGFloat initialContentOffsetY = self.contentOffsetAtBeginning.y;
+        CGFloat initialContentOffsetY = self.contentOffsetAtBeginning.y + scrollView.contentInset.top;
+        CGFloat y = scrollView.contentOffset.y + scrollView.contentInset.top;
+        CGFloat barY;
+        if (self.interactiveBarStateAtBeginning == InteractiveBarStateVisible) {
+            barY = initialContentOffsetY;
+        } else if (self.interactiveBarStateAtBeginning == InteractiveBarStateHidden) {
+            barY = initialContentOffsetY - self.proxy.interactionTranslation;
+        } else {
+            barY = initialContentOffsetY - (self.proxy.interactionTranslation * (1.0 - self.lastInteractingProgress));
+        }
+        CGFloat progress;
+        if (y < barY) {
+            progress = 1.0;
+        } else if (y <= (self.proxy.interactionTranslation + barY)) {
+            progress = 1.0 - ((y - barY) / (self.proxy.interactionTranslation));
+        } else {
+            progress = 0.0;
+        }
         
         if (dy > 0) {
             // User scrolling up = dragging down = progress increases
-            // - Interactively show when we're at the top of content
-            // - Otherwise do nothing
-            CGFloat y = MAX(0.0, (scrollView.contentOffset.y + scrollView.contentInset.top));
-            if (y <= self.proxy.interactionTranslation) {
-                CGFloat progress = ABS(y/self.proxy.interactionTranslation);
-                progress = 1.0 - MAX(0.0, MIN(progress, 1.0));
-                [self delegateInteractiveActionWithProgress:progress];
-            }
+            // - Interactively show
+            [self delegateInteractiveActionWithProgress:progress];
         } else if (dy < 0) {
             // User scrolling down = dragging up = progress decreases
             // - Non-interactively show when we begin drags at the end of content
             // - Otherwise interactively hide
-            
-            if (initialContentOffsetY >= (scrollView.contentSize.height - scrollView.bounds.size.height - 1.0)) {
+            if (self.contentOffsetAtBeginning.y >= (scrollView.contentSize.height - scrollView.bounds.size.height - 1.0)) {
                 [self delegateNonInteractiveActionWithBarHidden:NO];
             } else {
-                CGFloat progress = ABS(dy/self.proxy.interactionTranslation);
-                if (self.interactiveBarStateAtBeginning == InteractiveBarStateVisible) {
-                    progress = 1.0 - MAX(0.0, MIN(progress, 1.0));
-                    [self delegateInteractiveActionWithProgress:progress];
-                } else if (self.interactiveBarStateAtBeginning == InteractiveBarStateHidden) {
-                    progress = 0.0;
-                    [self delegateInteractiveActionWithProgress:progress];
-                }
+                [self delegateInteractiveActionWithProgress:progress];
             }
         }
     }
@@ -89,8 +93,10 @@ typedef NS_ENUM(NSInteger, InteractiveBarState) {
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
+    CGFloat dy = [scrollView.panGestureRecognizer translationInView:scrollView].y;
+    
     if (decelerate) {
-        if ([scrollView.panGestureRecognizer translationInView:scrollView].y > 0) {
+        if (dy > 0) {
             // Flick down
             // Non-interactively show
             [self delegateNonInteractiveActionWithBarHidden:NO];
@@ -104,7 +110,7 @@ typedef NS_ENUM(NSInteger, InteractiveBarState) {
             }
         }
     } else {
-        if ([scrollView.panGestureRecognizer translationInView:scrollView].y > 0) {
+        if (dy > 0) {
             // Drag down and hold, then stop
             // Kill interactive animation with non-interactive one, depending on its current direction
             if (self.interactiveBarState == InteractiveBarStateInteracting) {
@@ -139,6 +145,7 @@ typedef NS_ENUM(NSInteger, InteractiveBarState) {
     }
     
     self.interactiveBarState = InteractiveBarStateInteracting;
+    self.lastInteractingProgress = progress;
 }
 
 - (void)delegateNonInteractiveActionWithBarHidden:(BOOL)hidden
@@ -149,8 +156,10 @@ typedef NS_ENUM(NSInteger, InteractiveBarState) {
     
     if (hidden) {
         self.interactiveBarState = InteractiveBarStateHidden;
+        self.lastInteractingProgress = 0.0;
     } else {
         self.interactiveBarState = InteractiveBarStateVisible;
+        self.lastInteractingProgress = 1.0;
     }
 }
 
