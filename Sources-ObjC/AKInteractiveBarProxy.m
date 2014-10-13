@@ -22,6 +22,8 @@ typedef NS_ENUM(NSInteger, InteractiveBarState) {
 @property (nonatomic) UIScrollView *scrollView;
 @end
 
+#pragma mark -
+
 @interface AKInteractiveBarProxyImpl : NSObject
 @property (nonatomic, weak) AKInteractiveBarProxy *proxy;
 @property (nonatomic) CGFloat interactionTranslation;
@@ -32,14 +34,13 @@ typedef NS_ENUM(NSInteger, InteractiveBarState) {
 
 @implementation AKInteractiveBarProxyImpl
 
-#pragma mark - UIScrollViewDelegate
+#pragma mark UIScrollViewDelegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     if (scrollView.panGestureRecognizer.state == UIGestureRecognizerStateChanged) {
         CGFloat dy = [scrollView.panGestureRecognizer translationInView:scrollView].y;
         CGFloat initialContentOffsetY = self.contentOffsetAtBeginning.y;
-        //CGRect visibleRect = UIEdgeInsetsInsetRect(scrollView.bounds, scrollView.contentInset);
         
         if (dy > 0) {
             // User scrolling up = dragging down = progress increases
@@ -56,7 +57,6 @@ typedef NS_ENUM(NSInteger, InteractiveBarState) {
             // - Non-interactively show when we begin drags at the end of content
             // - Otherwise interactively hide
             
-            //if (initialContentOffsetY >= (scrollView.contentSize.height - (visibleRect.size.height + visibleRect.origin.y) - 1.0)) {
             if (initialContentOffsetY >= (scrollView.contentSize.height - scrollView.bounds.size.height - 1.0)) {
                 [self delegateNonInteractiveActionWithBarHidden:NO];
             } else {
@@ -130,7 +130,7 @@ typedef NS_ENUM(NSInteger, InteractiveBarState) {
     }
 }
 
-#pragma mark - Private
+#pragma mark Private
 
 - (void)delegateInteractiveActionWithProgress:(CGFloat)progress
 {
@@ -181,7 +181,7 @@ typedef NS_ENUM(NSInteger, InteractiveBarState) {
     return self;
 }
 
-#pragma mark - NSProxy
+#pragma mark NSProxy
 
 - (void)forwardInvocation:(NSInvocation *)invocation
 {
@@ -206,7 +206,7 @@ typedef NS_ENUM(NSInteger, InteractiveBarState) {
     }
 }
 
-#pragma mark - Public
+#pragma mark Public
 
 - (CGFloat)interactionTranslation
 {
