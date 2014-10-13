@@ -4,7 +4,7 @@ AKInteractiveBarProxy library provides a proxy object which helps you to make Sa
 
 ## Install
 
-CocoaPods *(NOT YET AVAILABLE)*
+To install the library, use CocoaPods by `pod 'AKInteractiveBarProxy', '~> 1.0'`
 
 ## Usage
 
