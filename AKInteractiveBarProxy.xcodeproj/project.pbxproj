@@ -97,9 +97,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		C59935A119D3E38E001BFD9B /* AKInteractiveBarProxy */ = {
+		C59935A119D3E38E001BFD9B /* Sample-ObjC */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C59935C519D3E38E001BFD9B /* Build configuration list for PBXNativeTarget "AKInteractiveBarProxy" */;
+			buildConfigurationList = C59935C519D3E38E001BFD9B /* Build configuration list for PBXNativeTarget "Sample-ObjC" */;
 			buildPhases = (
 				C599359E19D3E38E001BFD9B /* Sources */,
 				C599359F19D3E38E001BFD9B /* Frameworks */,
@@ -109,7 +109,7 @@
 			);
 			dependencies = (
 			);
-			name = AKInteractiveBarProxy;
+			name = "Sample-ObjC";
 			productName = AKInteractiveBarProxy;
 			productReference = C59935A219D3E38E001BFD9B /* AKInteractiveBarProxy.app */;
 			productType = "com.apple.product-type.application";
@@ -141,7 +141,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				C59935A119D3E38E001BFD9B /* AKInteractiveBarProxy */,
+				C59935A119D3E38E001BFD9B /* Sample-ObjC */,
 			);
 		};
 /* End PBXProject section */
@@ -303,13 +303,14 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C59935C519D3E38E001BFD9B /* Build configuration list for PBXNativeTarget "AKInteractiveBarProxy" */ = {
+		C59935C519D3E38E001BFD9B /* Build configuration list for PBXNativeTarget "Sample-ObjC" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C59935C619D3E38E001BFD9B /* Debug */,
 				C59935C719D3E38E001BFD9B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
