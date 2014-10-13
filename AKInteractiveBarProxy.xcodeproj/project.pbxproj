@@ -19,7 +19,6 @@
 /* Begin PBXFileReference section */
 		C59935A219D3E38E001BFD9B /* AKInteractiveBarProxy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AKInteractiveBarProxy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C59935A619D3E38E001BFD9B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		C59935A719D3E38E001BFD9B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		C59935B019D3E38E001BFD9B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C59935B219D3E38E001BFD9B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		C59935B519D3E38E001BFD9B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -75,7 +74,6 @@
 			isa = PBXGroup;
 			children = (
 				C59935A619D3E38E001BFD9B /* Info.plist */,
-				C59935A719D3E38E001BFD9B /* main.m */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
